@@ -1,6 +1,30 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import { ComponentStatic } from '@/helper/common';
+import '@/styles/globals.scss'
+import { NextComponentType, NextPageContext } from 'next';
+import type { AppContext, AppProps } from 'next/app'
+import { AppPropsType } from 'next/dist/shared/lib/utils';
+import { useMemo } from 'react'
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+const App = ({ Component, pageProps }: AppProps & AppPropsType) => {
+  const renderApp = useMemo(()=>{
+    const C = Component as NextComponentType<NextPageContext, any> & ComponentStatic;
+    const { renderLayout } = C;
+    if (renderLayout) {
+      return renderLayout({ children: <C {...pageProps} /> });
+    }
+    return <C {...pageProps} />;
+  },[Component, pageProps]);
+  return (
+    <>
+    {renderApp}
+    </>
+  )
 }
+
+App.getInitialProps = ({ Component, ctx }: AppContext) =>{
+  return {
+    pageProps: { ...(Component.getInitialProps ? Component.getInitialProps(ctx) : {}) },
+  };
+}
+
+export default App;
