@@ -1,20 +1,20 @@
 import { renderMainLayout } from "@/layout/MainLayout/MainLayout";
 import React, { FC } from "react";
 import { ComponentStatic } from "@/helper/common";
-import HomeUser from "@/container/HomeUser";
+import Step2 from "@/container/Recommend-Caption/Step2";
 import Head from "next/head";
 
-const AcountPage: FC & ComponentStatic = () => {
+const Step3: FC & ComponentStatic = () => {
   return (
     <>
       <Head>
-        <title>Collection</title>
+        <title>Recommend Captions</title>
       </Head>
-      <HomeUser />
+      <Step2 />
     </>
   );
 };
 
-AcountPage.renderLayout = renderMainLayout;
+Step3.renderLayout = renderMainLayout;
 
-export default AcountPage;
+export default Step3;

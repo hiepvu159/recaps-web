@@ -13,7 +13,7 @@ export default function RecommendCaption() {
       <div style={{ backgroundColor: "#d5b6ff" }}>
         <div className={classes.headerWrapper}>
           <Image src={bg} alt="" className={classes.imgBg} />
-          <div className={classes.bgDescription}>Gợi ý caption</div>
+          <div className={classes.bgDescription}>Caption recommendation</div>
         </div>
       </div>
     );
@@ -22,11 +22,11 @@ export default function RecommendCaption() {
   return (
     <>
       {renderHeader}
-      <div style={{ backgroundColor: "#FFFAFA", height: '100%' }}>
-        {/* <Step1 /> */}
+      <div style={{ backgroundColor: "#FFFAFA", height: "100%" }}>
         {/* <Step0/> */}
+        {/* <Step1 /> */}
         {/* <Step2/> */}
-        <Step3/>
+        {/* <Step3/> */}
       </div>
     </>
   );

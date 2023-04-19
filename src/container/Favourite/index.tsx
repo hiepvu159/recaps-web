@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { useMemo } from "react";
-import classes from "./home-user.module.scss";
+import classes from "./favourite.module.scss";
 import bg from "@/assets/img/test.svg";
 import Link from "next/link";
 import Card from "@/components/Cards";
@@ -9,8 +9,9 @@ import icX from "@/assets/img/icX.svg";
 import icSearch from "@/assets/img/icSearch.svg";
 import icStar from "@/assets/img/icStar.svg";
 import icUnStar from "@/assets/img/icUnStar.svg";
+import cx from "classnames";
 
-export default function HomeUser() {
+export default function Favourite() {
   const renderHeader = useMemo(() => {
     return (
       <div style={{ backgroundColor: "#FFFAFA", position: "relative" }}>
@@ -18,10 +19,13 @@ export default function HomeUser() {
           <Image src={bg} alt="" className={classes.imgBg} />
           <div className={classes.itemMenu}>
             <div style={{ marginBottom: 10, display: "flex" }}>
-              <Link href="/account" className={classes.captions}>
+              <Link
+                href="/account"
+                className={cx(classes.favourite, classes.margin)}
+              >
                 Collection
               </Link>
-              <Link href="/account/favourite" className={classes.favourite}>
+              <Link href="/account/favourite" className={classes.captions}>
                 Favourite
               </Link>
               <Link href="/account/captions" className={classes.favourite}>

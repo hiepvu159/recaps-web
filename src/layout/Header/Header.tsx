@@ -26,7 +26,7 @@ export default function Header() {
                 Home
               </Button>
             </Link>
-            <Link href={"/account/recommendation"}>
+            <Link href={"/account/recommend-caption/step1"}>
               <Button
                 buttonType="transparent"
                 buttonSize="m"
@@ -52,8 +52,10 @@ export default function Header() {
                 className={classes.avatar}
               />
             </div>
-            <div className={cx(classes.itemNoti, classes.name)}>RettoFeng云峰</div>
-            <div className={cx(classes.groupBtn, 'ml-3')}>
+            <div className={cx(classes.itemNoti, classes.name)}>
+              RettoFeng云峰
+            </div>
+            <div className={cx(classes.groupBtn, "ml-3")}>
               <Link href={"/login"}>
                 <Button
                   buttonType="outline"
@@ -92,7 +94,7 @@ export default function Header() {
   }, [router]);
   return (
     <div className={classes.headerWrapper}>
-      <div onClick={()=> router.push('/')}>
+      <div onClick={() => router.push("/")}>
         <Image
           src={logo}
           alt=""

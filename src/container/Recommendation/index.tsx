@@ -16,6 +16,7 @@ import icComment from "@/assets/img/icComment.svg";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import { Switch } from "@mui/material";
+import Link from "next/link";
 
 const colourOptions: any = [
   { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
@@ -74,43 +75,44 @@ export default function Recommendation() {
               />
             </div>
           </div>
-          <div style={{ marginTop: 10, display: "flex" }}>
-            <div style={{ display: "flex", marginRight: 40 }}>
-              <Image
-                src={icComment}
-                alt=""
-                width={24}
-                height={24}
-                style={{ marginRight: 10 }}
-              />
-              <div>123</div>
-            </div>
-            <div style={{ display: "flex" }}>
-              <Image
-                src={icHeart}
-                alt=""
-                width={24}
-                height={24}
-                style={{ marginRight: 10 }}
-              />
-              <div>123</div>
-            </div>
-          </div>
           <div className={classes.divided} />
         </div>
       </>
     );
   }, []);
 
+  const renderHeader = useMemo(() => {
+    return (
+      <div style={{ backgroundColor: "#FFFAFA", position: "relative" }}>
+        <div className={classes.headerWrapper}>
+          <Image src={bg} alt="" className={classes.imgBg} />
+          <div className={classes.itemMenu}>
+            <div style={{ marginBottom: 10, display: "flex" }}>
+              <Link
+                href="/account"
+                className={cx(classes.favourite, classes.marginLeft)}
+              >
+                Collection
+              </Link>
+              <Link href="/account/favourite" className={classes.favourite}>
+                Favourite
+              </Link>
+              <Link href="/account/captions" className={classes.captions}>
+                Captions
+              </Link>
+            </div>
+            <div className={classes.divied} />
+          </div>
+        </div>
+      </div>
+    );
+  }, []);
   return (
     <>
-      <div className={classes.background}>
-        <Image src={bg} alt="" className={classes.imgBg} />
-        <div className={classes.bgDescription}>Đăng caption của bạn</div>
-      </div>
+      {renderHeader}
       <div className={classes.containerContent}>
         <Card className={cx(classes.cardItem, classes.tagContainer)}>
-          <div className={classes.heading}>Nội dung</div>
+          <div className={classes.heading}>Content</div>
           <div className={classes.divided} />
           <textarea
             placeholder="What you thinking?"
@@ -121,7 +123,7 @@ export default function Recommendation() {
               <div>
                 <div className={classes.tagTitle}>Tags</div>
                 <div className={classes.desTag}>
-                  Thêm tags để mô tả caption của bạn là về gì:
+                  Add tags to describe what your caption is about
                 </div>
               </div>
               <div>
