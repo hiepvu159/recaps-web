@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import classes from "./home-user.module.scss";
 import bg from "@/assets/img/test.svg";
 import Link from "next/link";
@@ -9,8 +9,24 @@ import icX from "@/assets/img/icX.svg";
 import icSearch from "@/assets/img/icSearch.svg";
 import icStar from "@/assets/img/icStar.svg";
 import icUnStar from "@/assets/img/icUnStar.svg";
+import icSmile from "@/assets/img/icSmile.svg";
+import icSad from "@/assets/img/icSad.svg";
+import icAction from "@/assets/img/icAction.svg";
+import Tags from "./Tag";
+import { getListCaptions } from "@/apis/captions.api";
+import moment from "moment";
 
 export default function HomeUser() {
+  const [listData, setListData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      await getListCaptions()
+        .then((data: any) => setListData(data?.reverse()))
+        .catch((err: any) => console.log(err));
+    };
+    fetchData();
+  }, []);
+
   const renderHeader = useMemo(() => {
     return (
       <div style={{ backgroundColor: "#FFFAFA", position: "relative" }}>
@@ -35,94 +51,54 @@ export default function HomeUser() {
     );
   }, []);
 
-  const renderTags = useMemo(() => {
-    return (
-      <Card className={classes.cardTags}>
-        <div className={classes.title}>Tags</div>
-        <div className={classes.listItemTags}>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-        </div>
-        <div>
-          <Image src={icSearch} alt="" className={classes.icSearch} />
-          <input
-            type="text"
-            className={classes.searchBox}
-            placeholder="Type your search tags..."
-          />
-        </div>
-      </Card>
-    );
-  }, []);
-
   const renderCaptions = useMemo(() => {
     return (
       <Card className={classes.cardCaption}>
-        <div className={classes.itemCaption}>
-          <Image src={icStar} alt="" />
-          <div style={{ marginLeft: 15 }}>
-            <div className={classes.descriptionItem}>
-              Tình yêu đâu phải con đò. Bến nào cũng đỗ, người nào cũng yêu
-            </div>
-            <div className={classes.itemDescription}>
-              <div className={classes.listTagsCap}>
-                <div className={classes.listTagItem}>
-                  <div className={classes.itemTagInList}>Tình yêu</div>
-                  <div className={classes.itemTagInList}>Ái Thương</div>
-                  <div className={classes.itemTagInList}>Ái Thương</div>
-                  <div className={classes.itemTagInList}>Ái Thương</div>
-                  <div className={classes.itemTagInList}>Ái Thương</div>
-                  <div className={classes.itemTagInList}>Ái Thương</div>
-                  <div className={classes.itemTagInList}>Ái Thương</div>
+        {listData?.map((item: any) => (
+          <div style={{ marginBottom: 20 }} key={item?.id}>
+            <div className={classes.itemCaption}>
+              <div className={classes.itemWrapper}>
+                <Image src={icStar} alt="" />
+                <div style={{ marginLeft: 15 }}>
+                  <div className={classes.descriptionItem}>{item?.content}</div>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <div className={classes.listTagItem}>
+                      <div className={classes.itemTagInList}>Tình yêu</div>
+                      <div className={classes.itemTagInList}>Ái Thương</div>
+                      <div className={classes.itemTagInList}>Ái Thương</div>
+                    </div>
+                    <div className={classes.itemDescription}>
+                      <div className={classes.itemDay}>
+                        {moment(item?.createDate).startOf("day").fromNow()}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className={classes.itemDay}>3 days ago</div>
+              <div className={classes.action}>
+                <Image
+                  src={item?.trangThai ? icSmile : icSad}
+                  alt=""
+                  width={24}
+                  height={24}
+                />
+                <Button buttonType="transparent" buttonSize="s">
+                  <Image src={icAction} alt="" />
+                </Button>
+              </div>
             </div>
+            {/* <div className={classes.itemDescription}>
+              <div className={classes.itemDay}>
+                {moment(item?.createDate).startOf("day").fromNow()}
+              </div>
+            </div> */}
           </div>
-        </div>
+        ))}
       </Card>
     );
-  }, []);
+  }, [listData]);
 
   return (
     <div style={{ backgroundColor: "#FFFAFA" }}>
@@ -135,7 +111,7 @@ export default function HomeUser() {
           padding: "0 160px 30px 160px",
         }}
       >
-        {renderTags}
+        <Tags />
         {renderCaptions}
       </div>
     </div>

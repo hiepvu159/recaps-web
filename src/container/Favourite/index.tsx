@@ -10,6 +10,7 @@ import icSearch from "@/assets/img/icSearch.svg";
 import icStar from "@/assets/img/icStar.svg";
 import icUnStar from "@/assets/img/icUnStar.svg";
 import cx from "classnames";
+import Tags from "../HomeUser/Tag";
 
 export default function Favourite() {
   const renderHeader = useMemo(() => {
@@ -36,66 +37,6 @@ export default function Favourite() {
           </div>
         </div>
       </div>
-    );
-  }, []);
-
-  const renderTags = useMemo(() => {
-    return (
-      <Card className={classes.cardTags}>
-        <div className={classes.title}>Tags</div>
-        <div className={classes.listItemTags}>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-          <div className={classes.itemTags}>
-            <Button buttonType="primary" className={classes.btnTags}>
-              Thả Thính
-            </Button>
-            <Image src={icX} alt="" style={{ margin: "0 10px" }} />
-            <div className={classes.numberTags}>0903</div>
-          </div>
-        </div>
-        <div>
-          <Image src={icSearch} alt="" className={classes.icSearch} />
-          <input
-            type="text"
-            className={classes.searchBox}
-            placeholder="Type your search tags..."
-          />
-        </div>
-      </Card>
     );
   }, []);
 
@@ -139,7 +80,7 @@ export default function Favourite() {
           padding: "0 160px 30px 160px",
         }}
       >
-        {renderTags}
+        <Tags />
         {renderCaptions}
       </div>
     </div>

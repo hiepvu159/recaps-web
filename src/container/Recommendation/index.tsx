@@ -1,11 +1,17 @@
-import React, { CSSProperties, useMemo } from "react";
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import Image from "next/image";
 import classes from "./recommend.module.scss";
 import bg from "@/assets/img/test.svg";
 import Card from "@/components/Cards";
 import Button from "@/components/Button/Button";
 import Select from "react-select";
-import { StylesConfig } from "react-select";
+import StylesConfig from "react-select";
 import cx from "classnames";
 import logo from "@/assets/img/logo.png";
 import icClock from "@/assets/img/icClock.svg";
@@ -17,22 +23,28 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import { Switch } from "@mui/material";
 import Link from "next/link";
-
-const colourOptions: any = [
-  { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
-  { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
-  { value: "purple", label: "Purple", color: "#5243AA" },
-  { value: "red", label: "Red", color: "#FF5630", isFixed: true },
-  { value: "orange", label: "Orange", color: "#FF8B00" },
-  { value: "yellow", label: "Yellow", color: "#FFC400" },
-  { value: "green", label: "Green", color: "#36B37E" },
-  { value: "forest", label: "Forest", color: "#00875A" },
-  { value: "slate", label: "Slate", color: "#253858" },
-  { value: "silver", label: "Silver", color: "#666666" },
-];
+import { getListTag } from "@/apis/listTag.api";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { checkExistLocalStorage } from "@/helper/ultilities";
+import { addNewCaption } from "@/apis/captions.api";
+import { useRouter } from "next/router";
 
 export default function Recommendation() {
-  const customStyle: StylesConfig = useMemo(
+  const [listTags, setListTags] = useState([]);
+  const [listTagsSelected, setListTagsSelected] = useState([]);
+  const [emotion, setEmotion] = useState<boolean>(true);
+  const schema = yup.object().shape({
+    content: yup.string().required("Vui lòng nhập username"),
+  });
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+  const customStyle: any = useMemo(
     () => ({
       dropdownIndicator: () => ({
         color: "#000",
@@ -41,6 +53,24 @@ export default function Recommendation() {
     }),
     []
   );
+  useEffect(() => {
+    const getAllTags = async () => {
+      const data = await getListTag();
+      setListTags(data);
+    };
+    getAllTags().catch((err) => console.log());
+  }, []);
+
+  const tagOptions = useMemo(() => {
+    if (listTags) {
+      return listTags?.map((item: any) => {
+        return {
+          value: item?.name,
+          label: item?.name,
+        };
+      });
+    }
+  }, [listTags]);
 
   const renderListCaption = useMemo(() => {
     return (
@@ -107,49 +137,87 @@ export default function Recommendation() {
       </div>
     );
   }, []);
+
+  const idUser = useMemo(() => {
+    const getUser: any =
+      checkExistLocalStorage() && localStorage.getItem("user");
+    const user: any = JSON.parse(getUser);
+    return user?.user?.id;
+  }, []);
+
+  const onSubmit = useCallback(
+    async (values: any) => {
+      const body = {
+        content: values?.content?.trim(),
+        idUser: idUser,
+        trangThai: emotion,
+      };
+      await addNewCaption(body)
+        .then(() => {
+          alert("Add Caption Success");
+          setEmotion(true);
+          setListTagsSelected([]);
+        })
+        .catch((err) => alert({ err }));
+    },
+    [idUser]
+  );
+
+  const handleChangeTags = useCallback((values: any) => {
+    setListTagsSelected(values);
+  }, []);
   return (
     <>
       {renderHeader}
-      <div className={classes.containerContent}>
-        <Card className={cx(classes.cardItem, classes.tagContainer)}>
-          <div className={classes.heading}>Content</div>
-          <div className={classes.divided} />
-          <textarea
-            placeholder="What you thinking?"
-            className={classes.description}
-          />
-          <div className={classes.tagSelect}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div>
-                <div className={classes.tagTitle}>Tags</div>
-                <div className={classes.desTag}>
-                  Add tags to describe what your caption is about
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={classes.containerContent}>
+          <Card className={cx(classes.cardItem, classes.tagContainer)}>
+            <div className={classes.heading}>Content</div>
+            <div className={classes.divided} />
+            <textarea
+              placeholder="What you thinking?"
+              className={classes.description}
+              {...register("content")}
+            />
+            <div className={classes.tagSelect}>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <div className={classes.tagTitle}>Tags</div>
+                  <div className={classes.desTag}>
+                    Add tags to describe what your caption is about
+                  </div>
+                </div>
+                <div>
+                  <div className={classes.emotionTitle}>Emotion</div>
+                  <FormControlLabel
+                    control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+                    label=""
+                    onChange={(e: any) => setEmotion(e.target?.checked)}
+                  />
                 </div>
               </div>
-              <div>
-                <div className={classes.emotionTitle}>Emotion</div>
-                <FormControlLabel
-                  control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
-                  label=""
-                />
-              </div>
+              <Select
+                isMulti
+                name="colors"
+                options={tagOptions}
+                className={classes.selectInput}
+                styles={customStyle}
+                onChange={handleChangeTags}
+              />
+              <Button
+                type="submit"
+                buttonType="primary"
+                className={classes.btnSubmit}
+              >
+                Submit
+              </Button>
             </div>
-            <Select
-              isMulti
-              name="colors"
-              options={colourOptions}
-              className={classes.selectInput}
-              styles={customStyle}
-            />
-            <Button buttonType="primary" className={classes.btnSubmit}>
-              Submit
-            </Button>
-          </div>
-        </Card>
-        <Card className={cx(classes.cardItem, classes.recommendContainer)}>
-          {renderListCaption}
-        </Card>
-      </div>
+          </Card>
+          <Card className={cx(classes.cardItem, classes.recommendContainer)}>
+            {renderListCaption}
+          </Card>
+        </div>
+      </form>
     </>
   );
 }

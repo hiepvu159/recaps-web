@@ -8,13 +8,23 @@ import icDrop from "@/assets/img/icDrop.svg";
 import Image from "next/image";
 import bg from "@/assets/img/test.svg";
 import { useRouter } from "next/router";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
+import storage from "@/config/firebase";
 
 export default function Step0() {
   const router = useRouter();
   const [path, setPath] = useState(null);
-  const handleChange = useCallback((e: any) => {
-    const targetName = e.target.value.split("\\").pop();
-    setPath(targetName);
+  const [image, setImage] = useState<any>(null);
+  const handleChange = useCallback((item: any) => {
+    // const targetName = e.target.value.split("\\").pop();
+    console.log(item[0]);
+    setPath(item[0]?.name);
+    setImage(item[0]);
   }, []);
   const renderHeader = useMemo(() => {
     return (
@@ -26,11 +36,16 @@ export default function Step0() {
       </div>
     );
   }, []);
-  const handleCountine = useCallback(() => {
-    if (router.pathname?.includes("account")) {
-      router.push("/account/recommend-caption/step2");
-    }
-    router.push("/recommend/step2");
+
+  console.log("image", image);
+  const handleUploaded = useCallback((item: any) => {
+    // const imgRef = ref(storage, `/items/${path}`);
+    // uploadBytes(imgRef, image).then((snapshot) => {
+    //   console.log(snapshot);
+    //   getDownloadURL(snapshot.ref).then((url) => {
+    //     console.log("url", url);
+    //   });
+    // });
   }, []);
   return (
     <>
@@ -64,13 +79,13 @@ export default function Step0() {
                   <input
                     type="file"
                     id="upload"
-                    onChange={(e) => handleChange(e)}
+                    onChange={(e) => handleChange(e.target.files)}
                     hidden
                   />
                 </label>
                 <Button
                   buttonType="primary"
-                  onClick={handleCountine}
+                  onClick={handleUploaded}
                   disabled={path === null}
                   style={{ marginTop: 20 }}
                 >

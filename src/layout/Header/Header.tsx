@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import logo from "@/assets/img/logo.png";
 import classes from "./header.module.scss";
 import Button from "@/components/Button/Button";
@@ -8,10 +8,22 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import icNetwork from "@/assets/img/icNetwork.svg";
 import icNoti from "@/assets/img/icNoti.svg";
-import sonbim from "@/assets/img/sonbim.svg";
+import { UserDetail } from "@/model/authenticate.model";
+import { checkExistLocalStorage } from "@/helper/ultilities";
 
 export default function Header() {
   const router = useRouter();
+  const [userInfo, setUserInfo] = useState<UserDetail>();
+  useEffect(() => {
+    const getItem: any =
+      checkExistLocalStorage() && localStorage.getItem("user");
+    setUserInfo(JSON.parse(getItem));
+  }, [router]);
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem("user");
+    router.push("/login");
+  }, []);
+
   const renderFeature = useMemo(() => {
     if (router.pathname.includes("account")) {
       return (
@@ -53,7 +65,7 @@ export default function Header() {
               />
             </div>
             <div className={cx(classes.itemNoti, classes.name)}>
-              RettoFeng云峰
+              {userInfo?.user?.userName || "User Name"}
             </div>
             <div className={cx(classes.groupBtn, "ml-3")}>
               <Link href={"/login"}>
@@ -61,6 +73,7 @@ export default function Header() {
                   buttonType="outline"
                   buttonSize="m"
                   className={cx(classes.btn, classes.btnLogout)}
+                  onClick={handleLogout}
                 >
                   Log out
                 </Button>
@@ -91,7 +104,7 @@ export default function Header() {
         </Button>
       </div>
     );
-  }, [router]);
+  }, [router, userInfo]);
   return (
     <div className={classes.headerWrapper}>
       <div onClick={() => router.push("/")}>
