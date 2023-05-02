@@ -1,24 +1,15 @@
-import React, {
-  CSSProperties,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import classes from "./recommend.module.scss";
 import bg from "@/assets/img/test.svg";
 import Card from "@/components/Cards";
 import Button from "@/components/Button/Button";
 import Select from "react-select";
-import StylesConfig from "react-select";
 import cx from "classnames";
 import logo from "@/assets/img/logo.png";
 import icClock from "@/assets/img/icClock.svg";
 import icSmile from "@/assets/img/icSmile.svg";
 import icSad from "@/assets/img/icSad.svg";
-import icHeart from "@/assets/img/icHeart.svg";
-import icComment from "@/assets/img/icComment.svg";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import { Switch } from "@mui/material";
@@ -222,7 +213,7 @@ export default function Recommendation() {
   );
 }
 
-const MaterialUISwitch = styled(Switch)(() => ({
+export const MaterialUISwitch = styled(Switch)(() => ({
   height: 34,
   padding: 1,
   "& .MuiSwitch-switchBase": {
@@ -236,7 +227,7 @@ const MaterialUISwitch = styled(Switch)(() => ({
       },
       "& + .MuiSwitch-track": {
         opacity: 1,
-        backgroundColor: "#7F56D9",
+        backgroundColor: "#FFEDED",
       },
     },
   },
@@ -257,7 +248,7 @@ const MaterialUISwitch = styled(Switch)(() => ({
   },
   "& .MuiSwitch-track": {
     opacity: 1,
-    backgroundColor: "#FFEDED",
+    backgroundColor: "#7F56D9",
     border: "3px solid #FF8A8A",
     borderRadius: 28.5,
   },

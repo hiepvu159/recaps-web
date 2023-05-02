@@ -15,9 +15,11 @@ import icAction from "@/assets/img/icAction.svg";
 import Tags from "./Tag";
 import { getListCaptions } from "@/apis/captions.api";
 import moment from "moment";
+import ItemCaption from "@/components/CaptionItem";
 
 export default function HomeUser() {
   const [listData, setListData] = useState([]);
+  const [show, setShow] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       await getListCaptions()
@@ -51,55 +53,6 @@ export default function HomeUser() {
     );
   }, []);
 
-  const renderCaptions = useMemo(() => {
-    return (
-      <Card className={classes.cardCaption}>
-        {listData?.map((item: any) => (
-          <div style={{ marginBottom: 20 }} key={item?.id}>
-            <div className={classes.itemCaption}>
-              <div className={classes.itemWrapper}>
-                <Image src={icStar} alt="" />
-                <div style={{ marginLeft: 15 }}>
-                  <div className={classes.descriptionItem}>{item?.content}</div>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div className={classes.listTagItem}>
-                      <div className={classes.itemTagInList}>Tình yêu</div>
-                      <div className={classes.itemTagInList}>Ái Thương</div>
-                      <div className={classes.itemTagInList}>Ái Thương</div>
-                    </div>
-                    <div className={classes.itemDescription}>
-                      <div className={classes.itemDay}>
-                        {moment(item?.createDate).startOf("day").fromNow()}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className={classes.action}>
-                <Image
-                  src={item?.trangThai ? icSmile : icSad}
-                  alt=""
-                  width={24}
-                  height={24}
-                />
-                <Button buttonType="transparent" buttonSize="s">
-                  <Image src={icAction} alt="" />
-                </Button>
-              </div>
-            </div>
-            {/* <div className={classes.itemDescription}>
-              <div className={classes.itemDay}>
-                {moment(item?.createDate).startOf("day").fromNow()}
-              </div>
-            </div> */}
-          </div>
-        ))}
-      </Card>
-    );
-  }, [listData]);
-
   return (
     <div style={{ backgroundColor: "#FFFAFA" }}>
       {renderHeader}
@@ -112,7 +65,11 @@ export default function HomeUser() {
         }}
       >
         <Tags />
-        {renderCaptions}
+        <Card className={classes.cardCaption}>
+          {listData?.map((item: any) => (
+            <ItemCaption item={item} key={item?.id} />
+          ))}
+        </Card>
       </div>
     </div>
   );

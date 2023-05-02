@@ -144,6 +144,7 @@
   border-radius: 26px;
   max-height: 620px;
   overflow-y: auto;
+  overflow-x: hidden;
   &::-webkit-scrollbar {
     width: 3px;
   }

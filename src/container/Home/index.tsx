@@ -27,7 +27,7 @@ export default function Home() {
           buttonType="primary"
           buttonSize="m"
           className={cx(classes.btn, classes.btnExplore)}
-          onClick={() => router.push("/login")}
+          onClick={() => router.push("/explore")}
         >
           Explore now
         </Button>
