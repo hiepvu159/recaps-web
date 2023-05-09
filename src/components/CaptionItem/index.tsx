@@ -1,4 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import classes from "./caption-item.module.scss";
 import Card from "../Cards";
 import Image from "next/image";
@@ -17,9 +23,47 @@ interface Props {
 export default function ItemCaption(props: Props) {
   const { item } = props;
   const [show, setShow] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const ref = useRef<any>(null);
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e: any) => {
+      if (
+        show &&
+        ref.current &&
+        !ref.current?.contains(e.target) &&
+        !showEdit &&
+        !showDelete
+      ) {
+        setShow(false);
+      }
+    };
+    document.addEventListener("mousedown", checkIfClickedOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+  }, [show, showEdit, showDelete, ref]);
+
+  const handleShowPopUpEdit = useCallback(() => {
+    setShowEdit(true);
+  }, [showEdit]);
+  const handleHidePopUpEdit = useCallback(() => {
+    setShowEdit(false);
+    setShow(false);
+  }, [showEdit]);
+  const handleHidePopUpDelete = useCallback(() => {
+    setShowDelete(false);
+    setShow(false);
+  }, [showDelete]);
+  const handleShowPopUpDelete = useCallback(() => {
+    setShowDelete(true);
+  }, [showDelete]);
+
   const renderCaptions = useMemo(() => {
     return (
-      <div className={classes.container}>
+      <div className={classes.container} ref={ref}>
         <div className={classes.itemCaption}>
           <div className={classes.itemWrapper}>
             <Image src={icStar} alt="" />
@@ -57,9 +101,20 @@ export default function ItemCaption(props: Props) {
             </Button>
           </div>
         </div>
-        {show && <Action item={item} />}
+        {show && (
+          <Action
+            item={item}
+            show={show}
+            showDelete={showDelete}
+            showEdit={showEdit}
+            handleHidePopUpDelete={handleHidePopUpDelete}
+            handleHidePopUpEdit={handleHidePopUpEdit}
+            handleShowPopUpDelete={handleShowPopUpDelete}
+            handleShowPopUpEdit={handleShowPopUpEdit}
+          />
+        )}
       </div>
     );
-  }, [item, show]);
+  }, [item, show, showDelete, showEdit]);
   return <>{renderCaptions}</>;
 }

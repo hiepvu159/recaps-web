@@ -7,3 +7,8 @@ export interface UserRequestBody {
 export function doLogin(body: UserRequestBody) {
   return unauthorizedRequest.post(`/login`, body);
 }
+
+export function signUp(body: any){
+  return unauthorizedRequest.post(`/register/new`, body);
+
+}

@@ -11,20 +11,19 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { doLogin } from "@/apis/authenticate.api";
 import { useRouter } from "next/router";
-import { stringify } from "querystring";
 
 export default function Login() {
   const schema = yup.object().shape({
     userName: yup
       .string()
-      .required("Vui lòng nhập username")
-      .max(32, "Tên tài khoản tối đa 32 ký tự")
-      .min(5, "Tên tài khoản tối thiểu 5 ký tự"),
+      .required("Name is required")
+      .max(25, "Username must be between 3 - 25 characters")
+      .min(3, "Username must be between 3 - 25 characters"),
     passWord: yup
       .string()
-      .required("Vui lòng nhập mật khẩu")
-      .max(20, "Mật khẩu tối đa 20 ký tự")
-      .min(6, "Mật khẩu tối thiểu 6 kí tự"),
+      .required("Password is required")
+      .max(25, "Password must be between 6 - 25 characters")
+      .min(6, "Password must be between 6 - 25 characters"),
   });
 
   const {
@@ -34,12 +33,15 @@ export default function Login() {
   } = useForm({ resolver: yupResolver(schema) });
   const router = useRouter();
   const onSubmit = useCallback(async (values: any) => {
-    const userDetail = await doLogin({
+    await doLogin({
       userName: values.userName,
       password: values.passWord,
-    });
-    localStorage.setItem("user", JSON.stringify(userDetail));
-    router.push("/account");
+    })
+      .then((res) => {
+        localStorage.setItem("user", JSON.stringify(res));
+        router.push("/account");
+      })
+      .catch((err) => alert(err));
   }, []);
 
   return (
@@ -57,22 +59,33 @@ export default function Login() {
             <div>
               <div>User Name</div>
               <Input
-                className={classes.inputBox}
+                className={
+                  !errors.userName ? classes.inputBox : classes.errorInput
+                }
                 placeholder="User Name"
                 {...register("userName")}
               />
               {errors.userName && (
-                <p className="error">{errors.root?.message}</p>
+                <p className={classes.error}>
+                  {errors?.userName?.message as any}
+                </p>
               )}
             </div>
             <div>
               <div>Password</div>
               <Input
-                className={classes.inputBox}
+                className={
+                  !errors.passWord ? classes.inputBox : classes.errorInput
+                }
                 placeholder="PassWord"
                 type="password"
                 {...register("passWord")}
               />
+              {errors.passWord && (
+                <p className={classes.error}>
+                  {errors?.passWord?.message as any}
+                </p>
+              )}
             </div>
             <div className={classes.actions}>
               <label className={classes.rememeberActions}>

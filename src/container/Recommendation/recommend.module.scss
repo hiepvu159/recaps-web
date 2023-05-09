@@ -243,3 +243,28 @@
 .marginLeft {
   margin-left: 160px;
 }
+.switch {
+  width: 60px;
+  height: 38px;
+  padding: 8px;
+  margin: auto 0;
+  .MuiSwitch-switchBase {
+    margin: 1;
+    padding: 0;
+  }
+
+  .Mui-checked {
+    color: #fff;
+    transform: translateX(22px);
+  }
+
+  .MuiSwitch-track {
+    opacity: 1;
+    background-color: "#FFEDED";
+  }
+
+  .MuiSwitch-thumb {
+    width: 32;
+    height: 32;
+  }
+}

@@ -25,6 +25,8 @@ export default function LineStepper() {
       setLabel("4");
       return setActiveStep(3);
     }
+    setLabel("1");
+    return setActiveStep(0);
   }, [router]);
 
   const renderIconStepper = useMemo(() => {

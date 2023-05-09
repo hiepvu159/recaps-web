@@ -12,7 +12,7 @@ import icSmile from "@/assets/img/icSmile.svg";
 import icSad from "@/assets/img/icSad.svg";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
-import { Switch } from "@mui/material";
+import { Switch, createTheme } from "@mui/material";
 import Link from "next/link";
 import { getListTag } from "@/apis/listTag.api";
 import { useForm } from "react-hook-form";
@@ -21,6 +21,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { checkExistLocalStorage } from "@/helper/ultilities";
 import { addNewCaption } from "@/apis/captions.api";
 import { useRouter } from "next/router";
+import { ThemeProvider } from "@material-ui/styles";
+
+const Smile = () => {
+  return <Image src={icSmile} alt="" width={20} height={20} />;
+};
+const Sad = () => {
+  return <Image src={icSad} alt="" width={20} height={20} />;
+};
 
 export default function Recommendation() {
   const [listTags, setListTags] = useState([]);
@@ -180,11 +188,22 @@ export default function Recommendation() {
                 </div>
                 <div>
                   <div className={classes.emotionTitle}>Emotion</div>
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
                     label=""
                     onChange={(e: any) => setEmotion(e.target?.checked)}
-                  />
+                  /> */}
+                  <ThemeProvider theme={theme}>
+                    <Switch
+                      checked={emotion}
+                      onChange={(e: any) => setEmotion(e.target?.checked)}
+                      name="checkedA"
+                      inputProps={{ "aria-label": "secondary checkbox" }}
+                      icon={<Sad />}
+                      checkedIcon={<Smile />}
+                      className={classes.switch}
+                    />
+                  </ThemeProvider>
                 </div>
               </div>
               <Select
@@ -253,3 +272,43 @@ export const MaterialUISwitch = styled(Switch)(() => ({
     borderRadius: 28.5,
   },
 }));
+
+const theme = createTheme({
+  components: {
+    MuiSwitch: {
+      styleOverrides: {
+        switchBase: {
+          "&$checked": {
+            color: "#fff",
+            transform: "translateX(22px)",
+          },
+          "&$checked + $track": {
+            opacity: 1,
+            backgroundColor: "#FFEDED",
+          },
+        },
+        thumb: {
+          width: 32,
+          height: 32,
+          "&:before": {
+            content: "''",
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            left: 0,
+            top: 0,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundImage: `url(${icSmile})`,
+          },
+        },
+        track: {
+          opacity: 1,
+          backgroundColor: "#7F56D9",
+          border: "3px solid #FF8A8A",
+          borderRadius: 28.5,
+        },
+      },
+    },
+  },
+});

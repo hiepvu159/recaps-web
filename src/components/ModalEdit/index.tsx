@@ -75,7 +75,11 @@ export default function ModalEdit({ open, handleClose, item }: Props) {
         <Button buttonType="primary" className={classes.btnSave}>
           Save
         </Button>
-        <Button buttonType="outline" className={classes.btnSave}>
+        <Button
+          buttonType="outline"
+          className={classes.btnSave}
+          onClick={handleClose}
+        >
           Cancel
         </Button>
       </Card>

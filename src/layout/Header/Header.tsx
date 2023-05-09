@@ -105,9 +105,15 @@ export default function Header() {
       </div>
     );
   }, [router, userInfo]);
+  const handleClickIcon = useCallback(() => {
+    if (router.pathname.includes("account")) {
+      return router.push("/account");
+    }
+    return router.push("/");
+  }, []);
   return (
     <div className={classes.headerWrapper}>
-      <div onClick={() => router.push("/")}>
+      <div onClick={handleClickIcon}>
         <Image
           src={logo}
           alt=""

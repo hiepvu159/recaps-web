@@ -8,21 +8,15 @@ import icDrop from "@/assets/img/icDrop.svg";
 import Image from "next/image";
 import bg from "@/assets/img/test.svg";
 import { useRouter } from "next/router";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import storage from "@/config/firebase";
 
 export default function Step0() {
   const router = useRouter();
   const [path, setPath] = useState(null);
   const [image, setImage] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const handleChange = useCallback((item: any) => {
-    // const targetName = e.target.value.split("\\").pop();
-    console.log(item[0]);
     setPath(item[0]?.name);
     setImage(item[0]);
   }, []);
@@ -37,15 +31,18 @@ export default function Step0() {
     );
   }, []);
 
-  console.log("image", image);
   const handleUploaded = useCallback((item: any) => {
-    // const imgRef = ref(storage, `/items/${path}`);
-    // uploadBytes(imgRef, image).then((snapshot) => {
-    //   console.log(snapshot);
-    //   getDownloadURL(snapshot.ref).then((url) => {
-    //     console.log("url", url);
-    //   });
-    // });
+    const imgRef = ref(storage, `/items/${path}`);
+    uploadBytes(imgRef, item).then((snapshot) => {
+      setLoading(true);
+      getDownloadURL(snapshot.ref).then((url) => {
+        setLoading(false);
+        if (router.pathname.includes("account")) {
+          return router.push("/account/recommend-caption/step2");
+        }
+        return router.push("/recommend/step2");
+      });
+    });
   }, []);
   return (
     <>
@@ -85,8 +82,8 @@ export default function Step0() {
                 </label>
                 <Button
                   buttonType="primary"
-                  onClick={handleUploaded}
-                  disabled={path === null}
+                  onClick={() => handleUploaded(image)}
+                  disabled={path === null || loading}
                   style={{ marginTop: 20 }}
                 >
                   Continue
