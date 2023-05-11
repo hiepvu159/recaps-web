@@ -17,7 +17,9 @@ export default function Header() {
   useEffect(() => {
     const getItem: any =
       checkExistLocalStorage() && localStorage.getItem("user");
-    setUserInfo(JSON.parse(getItem));
+    if (!!getItem) {
+      setUserInfo(JSON.parse(getItem));
+    }
   }, [router]);
   const handleLogout = useCallback(() => {
     localStorage.removeItem("user");
