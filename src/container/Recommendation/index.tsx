@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+gimport React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import classes from "./recommend.module.scss";
 import bg from "@/assets/img/test.svg";
@@ -21,7 +21,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { checkExistLocalStorage } from "@/helper/ultilities";
 import { addNewCaption } from "@/apis/captions.api";
 import { useRouter } from "next/router";
-import { ThemeProvider } from "@material-ui/styles";
 
 const Smile = () => {
   return <Image src={icSmile} alt="" width={20} height={20} />;
@@ -193,20 +192,20 @@ export default function Recommendation() {
                     label=""
                     onChange={(e: any) => setEmotion(e.target?.checked)}
                   /> */}
-                  <ThemeProvider theme={theme}>
-                    <Switch
-                      checked={emotion}
-                      onChange={(e: any) => setEmotion(e.target?.checked)}
-                      name="checkedA"
-                      inputProps={{
+                  {/* <ThemeProvider theme={theme}> */}
+                  <Switch
+                    checked={emotion}
+                    onChange={(e: any) => setEmotion(e.target?.checked)}
+                    name="checkedA"
+                    inputProps={{
                         "aria-label": "secondary checkbox",
                         className: classes.switch,
                       }}
-                      icon={<Sad />}
-                      checkedIcon={<Smile />}
-                      className={classes.switch}
-                    />
-                  </ThemeProvider>
+                    icon={<Sad />}
+                    checkedIcon={<Smile />}
+                    className={classes.switch}
+                  />
+                  {/* </ThemeProvider> */}
                 </div>
               </div>
               <Select
