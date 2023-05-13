@@ -198,7 +198,10 @@ export default function Recommendation() {
                       checked={emotion}
                       onChange={(e: any) => setEmotion(e.target?.checked)}
                       name="checkedA"
-                      inputProps={{ "aria-label": "secondary checkbox" }}
+                      inputProps={{
+                        "aria-label": "secondary checkbox",
+                        className: classes.switch,
+                      }}
                       icon={<Sad />}
                       checkedIcon={<Smile />}
                       className={classes.switch}

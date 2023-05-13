@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useState, useEffect } from "react";
 import classes from "./step2.module.scss";
 import Card from "@/components/Cards";
 import LineStepper from "../Stepper";
@@ -8,28 +8,29 @@ import Button from "@/components/Button/Button";
 import { Grid } from "@mui/material";
 import bg from "@/assets/img/test.svg";
 import { useRouter } from "next/router";
+import { checkExistLocalStorage } from "@/helper/ultilities";
 
-export default function Step2() {
+interface Props {
+  path: string;
+}
+
+export default function Step2({ path }: Props) {
   const router = useRouter();
-  const renderHeader = useMemo(() => {
-    return (
-      <div style={{ backgroundColor: "#d5b6ff" }}>
-        <div className={classes.headerWrapper}>
-          <Image src={bg} alt="" className={classes.imgBg} />
-          <div className={classes.bgDescription}>Caption recommendation</div>
-        </div>
-      </div>
-    );
+  const [urlImage, setUrlImage] = useState("");
+  useEffect(() => {
+    if (checkExistLocalStorage()) {
+      setUrlImage(localStorage.getItem("urlImage") as string);
+    }
   }, []);
   const handleClick = useCallback(() => {
-    if (router.pathname?.includes("account")) {
-      router.push("/account/recommend-caption/step4");
-    }
-    router.push("/recommend/step4");
+    router.replace({
+      query: {
+        step: "4",
+      },
+    });
   }, []);
   return (
     <>
-      {renderHeader}
       <Card className={classes.card}>
         <LineStepper />
         <Grid container spacing={4} style={{ marginTop: 20 }}>
@@ -40,15 +41,22 @@ export default function Step2() {
               </div>
             </Card>
           </Grid>
-          <Grid item xs={5} style={{ position: "relative" }}>
-            <Image src={bgImg} alt="" className={classes.img} />
-            <Button
-              buttonType="primary"
-              className={classes.btnContinue}
-              onClick={handleClick}
-            >
-              Continue
-            </Button>
+          <Grid item xs={5}>
+            <div style={{ position: "relative", height: 340 }}>
+              <Image
+                src={path?.length > 0 ? path : urlImage}
+                alt=""
+                className={classes.img}
+                fill
+              />
+              <Button
+                buttonType="primary"
+                className={classes.btnContinue}
+                onClick={handleClick}
+              >
+                Continue
+              </Button>
+            </div>
           </Grid>
         </Grid>
       </Card>

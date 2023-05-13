@@ -1,52 +1,25 @@
 import Card from "@/components/Cards";
 import { Grid } from "@mui/material";
-import React, { useCallback, useState, useMemo } from "react";
+import React from "react";
 import LineStepper from "../Stepper";
 import classes from "./step0.module.scss";
 import Button from "@/components/Button/Button";
 import icDrop from "@/assets/img/icDrop.svg";
 import Image from "next/image";
-import bg from "@/assets/img/test.svg";
-import { useRouter } from "next/router";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import storage from "@/config/firebase";
 
-export default function Step0() {
-  const router = useRouter();
-  const [path, setPath] = useState(null);
-  const [image, setImage] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const handleChange = useCallback((item: any) => {
-    setPath(item[0]?.name);
-    setImage(item[0]);
-  }, []);
-  const renderHeader = useMemo(() => {
-    return (
-      <div style={{ backgroundColor: "#d5b6ff" }}>
-        <div className={classes.headerWrapper}>
-          <Image src={bg} alt="" className={classes.imgBg} />
-          <div className={classes.bgDescription}>Caption recommendation</div>
-        </div>
-      </div>
-    );
-  }, []);
+interface Props {
+  image: any;
+  loading: boolean;
+  path: any;
+  handleChange: (e: any) => void;
+  handleUploaded: (e: any) => void;
+}
 
-  const handleUploaded = useCallback((item: any) => {
-    const imgRef = ref(storage, `/items/${path}`);
-    uploadBytes(imgRef, item).then((snapshot) => {
-      setLoading(true);
-      getDownloadURL(snapshot.ref).then((url) => {
-        setLoading(false);
-        if (router.pathname.includes("account")) {
-          return router.push("/account/recommend-caption/step2");
-        }
-        return router.push("/recommend/step2");
-      });
-    });
-  }, []);
+export default function Step0(props: Props) {
+  const { handleChange, handleUploaded, image, loading, path } = props;
+
   return (
     <>
-      {renderHeader}
       <div style={{ backgroundColor: "#FFFAFA", height: "100%" }}>
         <Card className={classes.card}>
           <LineStepper />
@@ -76,7 +49,7 @@ export default function Step0() {
                   <input
                     type="file"
                     id="upload"
-                    onChange={(e) => handleChange(e.target.files)}
+                    onChange={(e) => handleChange(e?.target?.files as any)}
                     hidden
                   />
                 </label>

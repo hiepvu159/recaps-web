@@ -1,15 +1,15 @@
-import { renderMainLayout } from '@/layout/MainLayout/MainLayout';
-import React, { FC } from 'react'
-import { ComponentStatic } from '@/helper/common';
-import RecommendCaption from '@/container/Recommend-Caption';
+import { renderMainLayout } from "@/layout/MainLayout/MainLayout";
+import React, { FC } from "react";
+import { ComponentStatic } from "@/helper/common";
+import RecommendCaption from "@/container/Recommend-Caption";
 
-const RecommendCaptionPage: FC & ComponentStatic = () =>  {
+const RecommendCaptionPage: FC & ComponentStatic = () => {
   return (
     <>
-    <RecommendCaption/>
+      <RecommendCaption />
     </>
-  )
-}
+  );
+};
 
 RecommendCaptionPage.renderLayout = renderMainLayout;
 

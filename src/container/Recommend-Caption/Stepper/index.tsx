@@ -37,7 +37,16 @@ export default function LineStepper() {
     <Box sx={{ width: "100%" }}>
       <Stepper activeStep={activeStep} alternativeLabel nonLinear>
         {steps.map((label, index) => (
-          <Step key={label}>
+          <Step
+            key={label}
+            onClick={() =>
+              router.replace({
+                query: {
+                  step: index + 1,
+                },
+              })
+            }
+          >
             {activeStep === index ? (
               <StepLabel icon={renderIconStepper}>
                 <div className={classes.labelStep}>{label}</div>

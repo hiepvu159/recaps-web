@@ -38,7 +38,7 @@ export default function Header() {
                 Home
               </Button>
             </Link>
-            <Link href={"/account/recommend-caption/step1"}>
+            <Link href={"/account/recommend-caption"}>
               <Button
                 buttonType="transparent"
                 buttonSize="m"
