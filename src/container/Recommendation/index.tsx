@@ -1,4 +1,4 @@
-gimport React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import classes from "./recommend.module.scss";
 import bg from "@/assets/img/test.svg";
@@ -198,9 +198,9 @@ export default function Recommendation() {
                     onChange={(e: any) => setEmotion(e.target?.checked)}
                     name="checkedA"
                     inputProps={{
-                        "aria-label": "secondary checkbox",
-                        className: classes.switch,
-                      }}
+                      "aria-label": "secondary checkbox",
+                      className: classes.switch,
+                    }}
                     icon={<Sad />}
                     checkedIcon={<Smile />}
                     className={classes.switch}

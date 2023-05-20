@@ -10,6 +10,7 @@ import icNetwork from "@/assets/img/icNetwork.svg";
 import icNoti from "@/assets/img/icNoti.svg";
 import { UserDetail } from "@/model/authenticate.model";
 import { checkExistLocalStorage } from "@/helper/ultilities";
+import { doLogout } from "@/apis/authenticate.api";
 
 export default function Header() {
   const router = useRouter();
@@ -21,9 +22,13 @@ export default function Header() {
       setUserInfo(JSON.parse(getItem));
     }
   }, [router]);
-  const handleLogout = useCallback(() => {
-    localStorage.removeItem("user");
-    router.push("/login");
+  const handleLogout = useCallback(async () => {
+    await doLogout()
+      .then(() => {
+        localStorage.removeItem("user");
+        router.push("/login");
+      })
+      .catch(() => console.log());
   }, []);
 
   const renderFeature = useMemo(() => {
