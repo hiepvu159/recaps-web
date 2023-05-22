@@ -38,7 +38,7 @@ export default function Login() {
       password: values.passWord,
     })
       .then((res) => {
-        localStorage.setItem("user", JSON.stringify(res));
+        // localStorage.setItem("user", JSON.stringify(res));
         router.push("/account");
       })
       .catch((err) => alert(err));
