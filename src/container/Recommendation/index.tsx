@@ -185,27 +185,24 @@ export default function Recommendation() {
                     Add tags to describe what your caption is about
                   </div>
                 </div>
-                <div>
+                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
                   <div className={classes.emotionTitle}>Emotion</div>
                   {/* <FormControlLabel
                     control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
                     label=""
                     onChange={(e: any) => setEmotion(e.target?.checked)}
                   /> */}
-                  {/* <ThemeProvider theme={theme}> */}
-                  <Switch
-                    checked={emotion}
+                  <FormControlLabel
+                    control={
+                      <MaterialUISwitch
+                        sx={{ ml: 5 }}
+                        defaultChecked={true}
+                        onChange={(e: any) => setEmotion(e.target?.checked)}
+                      />
+                    }
+                    label=""
                     onChange={(e: any) => setEmotion(e.target?.checked)}
-                    name="checkedA"
-                    inputProps={{
-                      "aria-label": "secondary checkbox",
-                      className: classes.switch,
-                    }}
-                    icon={<Sad />}
-                    checkedIcon={<Smile />}
-                    className={classes.switch}
                   />
-                  {/* </ThemeProvider> */}
                 </div>
               </div>
               <Select
@@ -234,25 +231,31 @@ export default function Recommendation() {
   );
 }
 
-export const MaterialUISwitch = styled(Switch)(() => ({
+export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+  width: 62,
   height: 34,
-  padding: 1,
+  padding: 7,
+  margin: 0,
   "& .MuiSwitch-switchBase": {
     margin: 1,
     padding: 0,
+    transform: "translateX(6px)",
     "&.Mui-checked": {
       color: "#fff",
       transform: "translateX(22px)",
       "& .MuiSwitch-thumb:before": {
-        backgroundImage: `url(${icSad})`,
+        backgroundImage: `url('data:image/svg+xml;utf8,<svg width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path fill="${encodeURIComponent(
+          "#FF8A8A"
+        )}" d="M14.36,14.23a3.76,3.76,0,0,1-4.72,0,1,1,0,0,0-1.28,1.54,5.68,5.68,0,0,0,7.28,0,1,1,0,1,0-1.28-1.54ZM9,11a1,1,0,1,0-1-1A1,1,0,0,0,9,11Zm6-2a1,1,0,1,0,1,1A1,1,0,0,0,15,9ZM12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/></svg>')`
       },
       "& + .MuiSwitch-track": {
         opacity: 1,
-        backgroundColor: "#FFEDED",
-      },
-    },
+        backgroundColor: '#FFD9D8',
+      }
+    }
   },
   "& .MuiSwitch-thumb": {
+    // backgroundColor: '#FFD9D8',
     width: 32,
     height: 32,
     "&:before": {
@@ -264,53 +267,15 @@ export const MaterialUISwitch = styled(Switch)(() => ({
       top: 0,
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center",
-      backgroundImage: `url(${icSmile})`,
-    },
+      // backgroundImage: `url('data:image/svg+xml;utf8,<svg fill="#000000" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="M8.36,15.33a1,1,0,0,0-.13,1.4,1,1,0,0,0,1.41.13,3.76,3.76,0,0,1,4.72,0,1,1,0,0,0,.64.23,1,1,0,0,0,.64-1.76A5.81,5.81,0,0,0,8.36,15.33Zm.85-4.79a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41,3.08,3.08,0,0,0-4.24,0,1,1,0,1,0,1.41,1.41A1,1,0,0,1,9.21,10.54ZM12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20ZM17.62,9.13a3.08,3.08,0,0,0-4.24,0,1,1,0,0,0,1.41,1.41,1,1,0,0,1,1.42,0,1,1,0,0,0,1.41,0A1,1,0,0,0,17.62,9.13Z"/></svg>')`
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path fill="${encodeURIComponent(
+        "#6941C6"
+      )}" d="M8.36 15.33a1 1 0 0 0-.13 1.4 1 1 0 0 0 1.41.13 3.76 3.76 0 0 1 4.72 0 1 1 0 0 0 .64.23 1 1 0 0 0 .64-1.76 5.81 5.81 0 0 0-7.28 0Zm.85-4.79a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41 3.08 3.08 0 0 0-4.24 0 1 1 0 1 0 1.41 1.41 1 1 0 0 1 1.42 0ZM12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8Zm5.62-10.87a3.08 3.08 0 0 0-4.24 0 1 1 0 0 0 1.41 1.41 1 1 0 0 1 1.42 0 1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41Z"/></svg>')`
+    }
   },
   "& .MuiSwitch-track": {
     opacity: 1,
-    backgroundColor: "#7F56D9",
-    border: "3px solid #FF8A8A",
-    borderRadius: 28.5,
-  },
+    backgroundColor: '#6941C6',
+    borderRadius: 20 / 2
+  }
 }));
-
-const theme = createTheme({
-  components: {
-    MuiSwitch: {
-      styleOverrides: {
-        switchBase: {
-          "&$checked": {
-            color: "#fff",
-            transform: "translateX(22px)",
-          },
-          "&$checked + $track": {
-            opacity: 1,
-            backgroundColor: "#FFEDED",
-          },
-        },
-        thumb: {
-          width: 32,
-          height: 32,
-          "&:before": {
-            content: "''",
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            left: 0,
-            top: 0,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            backgroundImage: `url(${icSmile})`,
-          },
-        },
-        track: {
-          opacity: 1,
-          backgroundColor: "#7F56D9",
-          border: "3px solid #FF8A8A",
-          borderRadius: 28.5,
-        },
-      },
-    },
-  },
-});
