@@ -19,9 +19,12 @@ import Action from "@/container/HomeUser/Action";
 
 interface Props {
   item: any;
+  handleDelete: (item: any) => void;
+  listTags: any;
+  handleUpdate: (item: any) => void;
 }
 export default function ItemCaption(props: Props) {
-  const { item } = props;
+  const { item, handleDelete, listTags, handleUpdate } = props;
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -61,6 +64,12 @@ export default function ItemCaption(props: Props) {
     setShowDelete(true);
   }, [showDelete]);
 
+  const findTag = useMemo(() => {
+    if (item && listTags) {
+      return listTags.find((i: any) => i.idTag === item.id_tag);
+    }
+  }, [item, listTags]);
+
   const renderCaptions = useMemo(() => {
     return (
       <div className={classes.container} ref={ref}>
@@ -71,9 +80,9 @@ export default function ItemCaption(props: Props) {
               <div className={classes.descriptionItem}>{item?.content}</div>
               <div className={classes.listItem}>
                 <div className={classes.listTagItem}>
-                  <div className={classes.itemTagInList}>Tình yêu</div>
-                  <div className={classes.itemTagInList}>Ái Thương</div>
-                  <div className={classes.itemTagInList}>Ái Thương</div>
+                  <div className={classes.itemTagInList}>
+                    {!!item?.id_tag ? findTag?.name : "Vui"}
+                  </div>
                 </div>
                 <div className={classes.itemDescription}>
                   <div className={classes.itemDay}>
@@ -85,7 +94,7 @@ export default function ItemCaption(props: Props) {
           </div>
           <div className={classes.action}>
             <Image
-              src={item?.trangThai ? icSmile : icSad}
+              src={item?.trang_thai ? icSmile : icSad}
               alt=""
               width={24}
               height={24}
@@ -103,6 +112,7 @@ export default function ItemCaption(props: Props) {
         </div>
         {show && (
           <Action
+            listTag={listTags}
             item={item}
             show={show}
             showDelete={showDelete}
@@ -111,6 +121,8 @@ export default function ItemCaption(props: Props) {
             handleHidePopUpEdit={handleHidePopUpEdit}
             handleShowPopUpDelete={handleShowPopUpDelete}
             handleShowPopUpEdit={handleShowPopUpEdit}
+            handleDelete={() => handleDelete(item)}
+            handleUpdate={(e) => handleUpdate(e)}
           />
         )}
       </div>

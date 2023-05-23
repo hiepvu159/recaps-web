@@ -13,10 +13,13 @@ interface Props {
   show: boolean;
   showEdit: boolean;
   showDelete: boolean;
+  listTag: any;
   handleShowPopUpEdit: () => void;
   handleHidePopUpEdit: () => void;
   handleHidePopUpDelete: () => void;
   handleShowPopUpDelete: () => void;
+  handleDelete: (item: any) => void;
+  handleUpdate: (item: any) => void;
 }
 
 export default function Action(props: Props) {
@@ -25,10 +28,13 @@ export default function Action(props: Props) {
     show,
     showEdit,
     showDelete,
+    listTag,
     handleShowPopUpEdit,
     handleHidePopUpEdit,
     handleHidePopUpDelete,
     handleShowPopUpDelete,
+    handleDelete,
+    handleUpdate,
   } = props;
   const ref = useRef<any>(null);
 
@@ -59,6 +65,8 @@ export default function Action(props: Props) {
               open={showEdit}
               handleClose={handleHidePopUpEdit}
               item={item}
+              handleUpdate={(e) => handleUpdate(e)}
+              listTag={listTag}
             />
           )}
           {showDelete && (
@@ -66,6 +74,7 @@ export default function Action(props: Props) {
               open={showDelete}
               handleClose={handleHidePopUpDelete}
               item={item}
+              handleDelete={() => handleDelete(item)}
             />
           )}
         </div>

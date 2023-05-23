@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Modal from "@mui/material/Modal";
 import Card from "../Cards";
 import classes from "./modal.module.scss";
@@ -6,11 +6,12 @@ import Select from "react-select";
 import { FormControlLabel } from "@mui/material";
 import { MaterialUISwitch } from "@/container/Recommendation";
 import Button from "../Button/Button";
-
 interface Props {
   open: boolean;
   handleClose: () => void;
   item: any;
+  handleUpdate: (item: any) => void;
+  listTag: any;
 }
 
 const options = [
@@ -18,8 +19,24 @@ const options = [
   { value: "strawberry", label: "Strawberry" },
   { value: "vanilla", label: "Vanilla" },
 ];
-export default function ModalEdit({ open, handleClose, item }: Props) {
+export default function ModalEdit({
+  open,
+  handleClose,
+  item,
+  handleUpdate,
+  listTag,
+}: Props) {
   const [emotion, setEmotion] = useState<boolean>(true);
+  const [content, setContent] = useState<string>("");
+  const [tag, setTag] = useState<number>(0);
+
+  useEffect(() => {
+    if (item) {
+      setContent(item?.content);
+      setEmotion(item?.trang_thai);
+      setTag(item?.id_tag);
+    }
+  }, [item]);
 
   const customStyle: any = useMemo(
     () => ({
@@ -34,6 +51,37 @@ export default function ModalEdit({ open, handleClose, item }: Props) {
     }),
     []
   );
+  const handleChangeTags = useCallback(
+    (e: any) => {
+      setTag(e?.value);
+    },
+    [tag]
+  );
+
+  const tagOptions = useMemo(() => {
+    if (listTag) {
+      return listTag?.map((item: any) => {
+        return {
+          value: item?.idTag,
+          label: item?.name,
+        };
+      });
+    }
+  }, [listTag]);
+
+  const defaultValueTag = useMemo(() => {
+    if (item && tagOptions) {
+      return tagOptions.find((item: any) => item.value === tag);
+    }
+  }, [tagOptions, item]);
+
+  const handleChangeEmotion = useCallback(
+    (e: any) => {
+      setEmotion(e);
+    },
+    [emotion]
+  );
+
   return (
     <Modal
       open={open}
@@ -45,18 +93,23 @@ export default function ModalEdit({ open, handleClose, item }: Props) {
         <div className={classes.title}>Editting</div>
         <div className={classes.item}>
           <div className={classes.titleItem}>Caption</div>
-          <textarea className={classes.description}>{item?.content}</textarea>
+          <textarea
+            className={classes.description}
+            onChange={(e) => setContent(e.target.value)}
+          >
+            {item?.content}
+          </textarea>
         </div>
         <div className={classes.item}>
           <div className={classes.titleItem}>Tags</div>
           <Select
-            isMulti
+            // isMulti
             name="colors"
-            options={options}
+            options={tagOptions}
             className={classes.selectInput}
-            // defaultValue={}
+            defaultValue={defaultValueTag}
             styles={customStyle}
-            // onChange={handleChangeTags}
+            onChange={(e) => handleChangeTags(e)}
           />
         </div>
         <div className={classes.emotion}>
@@ -65,14 +118,19 @@ export default function ModalEdit({ open, handleClose, item }: Props) {
             control={
               <MaterialUISwitch
                 sx={{ ml: 5 }}
-                defaultChecked={item?.trangThai}
+                defaultChecked={item?.trang_thai}
+                onChange={(e) => handleChangeEmotion(e.target.checked)}
               />
             }
             label=""
             onChange={(e: any) => setEmotion(e.target?.checked)}
           />
         </div>
-        <Button buttonType="primary" className={classes.btnSave}>
+        <Button
+          buttonType="primary"
+          className={classes.btnSave}
+          onClick={() => handleUpdate({ content, tag, emotion, item })}
+        >
           Save
         </Button>
         <Button

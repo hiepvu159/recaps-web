@@ -1,17 +1,24 @@
 import { Modal } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 import Card from "../Cards";
 import classes from "./modal-delete.module.scss";
 import Image from "next/image";
 import icDanger from "@/assets/img/icDanger.svg";
 import Button from "../Button/Button";
+import { deleteCaption } from "@/apis/captions.api";
 
 interface Props {
   open: boolean;
   handleClose: () => void;
   item: any;
+  handleDelete: (item: any) => void;
 }
-export default function ModalDelete({ open, handleClose, item }: Props) {
+export default function ModalDelete({
+  open,
+  handleClose,
+  item,
+  handleDelete,
+}: Props) {
   return (
     <Modal
       open={open}
@@ -34,7 +41,11 @@ export default function ModalDelete({ open, handleClose, item }: Props) {
           >
             Cancel
           </Button>
-          <Button buttonType="primary" className={classes.btbDelete}>
+          <Button
+            buttonType="primary"
+            className={classes.btbDelete}
+            onClick={() => handleDelete(item)}
+          >
             Delete
           </Button>
         </div>

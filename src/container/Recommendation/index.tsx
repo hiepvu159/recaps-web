@@ -22,16 +22,18 @@ import { checkExistLocalStorage } from "@/helper/ultilities";
 import { addNewCaption } from "@/apis/captions.api";
 import { useRouter } from "next/router";
 
-const Smile = () => {
-  return <Image src={icSmile} alt="" width={20} height={20} />;
-};
-const Sad = () => {
-  return <Image src={icSad} alt="" width={20} height={20} />;
-};
+interface InitStateTagSelected {
+  value: number;
+  label: string;
+}
 
 export default function Recommendation() {
   const [listTags, setListTags] = useState([]);
-  const [listTagsSelected, setListTagsSelected] = useState([]);
+  const [listTagsSelected, setListTagsSelected] =
+    useState<InitStateTagSelected>({
+      value: 0,
+      label: "string",
+    });
   const [emotion, setEmotion] = useState<boolean>(true);
   const schema = yup.object().shape({
     content: yup.string().required("Vui lòng nhập username"),
@@ -63,7 +65,7 @@ export default function Recommendation() {
     if (listTags) {
       return listTags?.map((item: any) => {
         return {
-          value: item?.name,
+          value: item?.idTag,
           label: item?.name,
         };
       });
@@ -145,16 +147,20 @@ export default function Recommendation() {
 
   const onSubmit = useCallback(
     async (values: any) => {
-      const body = {
+      const body: any = {
         content: values?.content?.trim(),
         idUser: idUser,
         trangThai: emotion,
+        idTag: listTagsSelected?.value as any,
       };
       await addNewCaption(body)
         .then(() => {
           alert("Add Caption Success");
           setEmotion(true);
-          setListTagsSelected([]);
+          setListTagsSelected({
+            value: 0,
+            label: "string",
+          });
         })
         .catch((err) => alert({ err }));
     },
@@ -185,7 +191,14 @@ export default function Recommendation() {
                     Add tags to describe what your caption is about
                   </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
                   <div className={classes.emotionTitle}>Emotion</div>
                   {/* <FormControlLabel
                     control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
@@ -206,7 +219,7 @@ export default function Recommendation() {
                 </div>
               </div>
               <Select
-                isMulti
+                // isMulti
                 name="colors"
                 options={tagOptions}
                 className={classes.selectInput}
@@ -246,13 +259,13 @@ export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
       "& .MuiSwitch-thumb:before": {
         backgroundImage: `url('data:image/svg+xml;utf8,<svg width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path fill="${encodeURIComponent(
           "#FF8A8A"
-        )}" d="M14.36,14.23a3.76,3.76,0,0,1-4.72,0,1,1,0,0,0-1.28,1.54,5.68,5.68,0,0,0,7.28,0,1,1,0,1,0-1.28-1.54ZM9,11a1,1,0,1,0-1-1A1,1,0,0,0,9,11Zm6-2a1,1,0,1,0,1,1A1,1,0,0,0,15,9ZM12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/></svg>')`
+        )}" d="M14.36,14.23a3.76,3.76,0,0,1-4.72,0,1,1,0,0,0-1.28,1.54,5.68,5.68,0,0,0,7.28,0,1,1,0,1,0-1.28-1.54ZM9,11a1,1,0,1,0-1-1A1,1,0,0,0,9,11Zm6-2a1,1,0,1,0,1,1A1,1,0,0,0,15,9ZM12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"/></svg>')`,
       },
       "& + .MuiSwitch-track": {
         opacity: 1,
-        backgroundColor: '#FFD9D8',
-      }
-    }
+        backgroundColor: "#FFD9D8",
+      },
+    },
   },
   "& .MuiSwitch-thumb": {
     // backgroundColor: '#FFD9D8',
@@ -270,12 +283,12 @@ export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
       // backgroundImage: `url('data:image/svg+xml;utf8,<svg fill="#000000" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="M8.36,15.33a1,1,0,0,0-.13,1.4,1,1,0,0,0,1.41.13,3.76,3.76,0,0,1,4.72,0,1,1,0,0,0,.64.23,1,1,0,0,0,.64-1.76A5.81,5.81,0,0,0,8.36,15.33Zm.85-4.79a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41,3.08,3.08,0,0,0-4.24,0,1,1,0,1,0,1.41,1.41A1,1,0,0,1,9.21,10.54ZM12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20ZM17.62,9.13a3.08,3.08,0,0,0-4.24,0,1,1,0,0,0,1.41,1.41,1,1,0,0,1,1.42,0,1,1,0,0,0,1.41,0A1,1,0,0,0,17.62,9.13Z"/></svg>')`
       backgroundImage: `url('data:image/svg+xml;utf8,<svg width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path fill="${encodeURIComponent(
         "#6941C6"
-      )}" d="M8.36 15.33a1 1 0 0 0-.13 1.4 1 1 0 0 0 1.41.13 3.76 3.76 0 0 1 4.72 0 1 1 0 0 0 .64.23 1 1 0 0 0 .64-1.76 5.81 5.81 0 0 0-7.28 0Zm.85-4.79a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41 3.08 3.08 0 0 0-4.24 0 1 1 0 1 0 1.41 1.41 1 1 0 0 1 1.42 0ZM12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8Zm5.62-10.87a3.08 3.08 0 0 0-4.24 0 1 1 0 0 0 1.41 1.41 1 1 0 0 1 1.42 0 1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41Z"/></svg>')`
-    }
+      )}" d="M8.36 15.33a1 1 0 0 0-.13 1.4 1 1 0 0 0 1.41.13 3.76 3.76 0 0 1 4.72 0 1 1 0 0 0 .64.23 1 1 0 0 0 .64-1.76 5.81 5.81 0 0 0-7.28 0Zm.85-4.79a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41 3.08 3.08 0 0 0-4.24 0 1 1 0 1 0 1.41 1.41 1 1 0 0 1 1.42 0ZM12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8Zm5.62-10.87a3.08 3.08 0 0 0-4.24 0 1 1 0 0 0 1.41 1.41 1 1 0 0 1 1.42 0 1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41Z"/></svg>')`,
+    },
   },
   "& .MuiSwitch-track": {
     opacity: 1,
-    backgroundColor: '#6941C6',
-    borderRadius: 20 / 2
-  }
+    backgroundColor: "#6941C6",
+    borderRadius: 20 / 2,
+  },
 }));

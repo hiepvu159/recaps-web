@@ -1,32 +1,62 @@
 import Image from "next/image";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import classes from "./home-user.module.scss";
 import bg from "@/assets/img/test.svg";
 import Link from "next/link";
 import Card from "@/components/Cards";
-import Button from "@/components/Button/Button";
-import icX from "@/assets/img/icX.svg";
-import icSearch from "@/assets/img/icSearch.svg";
-import icStar from "@/assets/img/icStar.svg";
-import icUnStar from "@/assets/img/icUnStar.svg";
-import icSmile from "@/assets/img/icSmile.svg";
-import icSad from "@/assets/img/icSad.svg";
-import icAction from "@/assets/img/icAction.svg";
 import Tags from "./Tag";
-import { getListCaptions } from "@/apis/captions.api";
-import moment from "moment";
+import {
+  deleteCaption,
+  getListCaptions,
+  updateCaption,
+} from "@/apis/captions.api";
 import ItemCaption from "@/components/CaptionItem";
+import { getListTag } from "@/apis/listTag.api";
 
 export default function HomeUser() {
   const [listData, setListData] = useState([]);
-  const [show, setShow] = useState("");
+  const [listTags, setListTags] = useState([]);
+
+  const handleDelete = useCallback(async (item: any) => {
+    await deleteCaption(item?.id_caption)
+      .then((res) => alert("Success"))
+      .catch((err) => console.log(err));
+
+    await getListCaptions()
+      .then((data: any) => {
+        setListData(data.table?.reverse());
+      })
+      .catch((err: any) => console.log(err));
+  }, []);
+
+  const handleUpdate = useCallback(async (item: any) => {
+    const payload = {
+      Content: item?.content,
+      IDCaption: item?.item.id_caption,
+      IDUser: item?.item.id_user,
+      TrangThai: item?.emotion,
+      IDTag: item?.tag,
+    };
+    await updateCaption(payload)
+      .then((res) => alert("Success"))
+      .catch((err) => console.log(err));
+    await getListCaptions()
+      .then((data: any) => {
+        setListData(data.table?.reverse());
+      })
+      .catch((err: any) => console.log(err));
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       await getListCaptions()
         .then((data: any) => {
-          setListData(data.table?.reverse())
+          setListData(data.table?.reverse());
         })
         .catch((err: any) => console.log(err));
+
+      const data = await getListTag();
+      setListTags(data);
     };
     fetchData();
   }, []);
@@ -69,7 +99,13 @@ export default function HomeUser() {
         <Tags />
         <Card className={classes.cardCaption}>
           {listData?.map((item: any) => (
-            <ItemCaption item={item} key={item?.id} />
+            <ItemCaption
+              item={item}
+              key={item?.id}
+              handleDelete={() => handleDelete(item)}
+              listTags={listTags}
+              handleUpdate={(e) => handleUpdate(e)}
+            />
           ))}
         </Card>
       </div>

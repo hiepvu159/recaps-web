@@ -28,7 +28,6 @@ export default function Step3({ path }: Props) {
     }
     router.push("/recommend/completed");
   }, []);
-  console.log("123", urlImage);
 
   return (
     <>
