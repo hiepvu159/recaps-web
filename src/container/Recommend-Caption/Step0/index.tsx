@@ -1,6 +1,6 @@
 import Card from "@/components/Cards";
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import LineStepper from "../Stepper";
 import classes from "./step0.module.scss";
 import Button from "@/components/Button/Button";
@@ -11,13 +11,15 @@ interface Props {
   image: any;
   loading: boolean;
   path: any;
+  imagePath: string;
   handleChange: (e: any) => void;
   handleUploaded: (e: any) => void;
 }
 
 export default function Step0(props: Props) {
-  const { handleChange, handleUploaded, image, loading, path } = props;
-
+  const { handleChange, handleUploaded, image, loading, path, imagePath } =
+    props;
+  const ref = useRef<any>(null);
   return (
     <>
       <div style={{ backgroundColor: "#FFFAFA", height: "100%" }}>
@@ -43,15 +45,31 @@ export default function Step0(props: Props) {
                     <span className={classes.dragDropTitle}>
                       Drag & Drop your image here
                     </span>
-                    <Image src={icDrop} alt="" />
-                    <div style={{ marginTop: 20 }}>{path}</div>
+                    <div
+                      style={{
+                        position: "relative",
+                        height: 300,
+                        width: "100%",
+                        marginTop: 20,
+                      }}
+                    >
+                      {imagePath ? (
+                        <Image src={imagePath} alt="" fill />
+                      ) : (
+                        <>
+                          <Image src={icDrop} alt="" fill />
+                        </>
+                      )}
+                    </div>
+                    <input
+                      style={{ marginTop: 20 }}
+                      ref={ref}
+                      type="file"
+                      id="upload"
+                      onChange={(e) => handleChange(e?.target?.files as any)}
+                      // hidden
+                    />
                   </div>
-                  <input
-                    type="file"
-                    id="upload"
-                    onChange={(e) => handleChange(e?.target?.files as any)}
-                    hidden
-                  />
                 </label>
                 <Button
                   buttonType="primary"

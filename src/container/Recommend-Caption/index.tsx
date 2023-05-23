@@ -15,6 +15,7 @@ export default function RecommendCaption() {
   const [path, setPath] = useState(null);
   const [urlImage, setUrlImage] = useState("");
   const [image, setImage] = useState<any>(null);
+  const [imagePath, setImagePath] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const renderHeader = useMemo(() => {
     return (
@@ -27,10 +28,16 @@ export default function RecommendCaption() {
     );
   }, []);
 
-  const handleChange = useCallback((item: any) => {
-    setPath(item[0]?.name);
-    setImage(item[0]);
-  }, []);
+  const handleChange = useCallback(
+    (item: any) => {
+      if (item) {
+        setImagePath(URL?.createObjectURL(item[0]));
+        setPath(item[0]?.name);
+        setImage(item[0]);
+      }
+    },
+    [path, image]
+  );
 
   const handleUploaded = useCallback((item: any) => {
     const imgRef = ref(storage, `/items/${path}`);
@@ -54,6 +61,7 @@ export default function RecommendCaption() {
       case "1":
         return (
           <Step0
+            imagePath={imagePath}
             handleChange={handleChange}
             handleUploaded={handleUploaded}
             image={image}
@@ -74,6 +82,7 @@ export default function RecommendCaption() {
       default:
         return (
           <Step0
+            imagePath={imagePath}
             handleChange={handleChange}
             handleUploaded={handleUploaded}
             image={image}
