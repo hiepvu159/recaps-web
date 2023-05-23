@@ -69,6 +69,7 @@ export default function ItemCaption(props: Props) {
       return listTags.find((i: any) => i.idTag === item.id_tag);
     }
   }, [item, listTags]);
+  console.log(findTag);
 
   const renderCaptions = useMemo(() => {
     return (
@@ -127,6 +128,6 @@ export default function ItemCaption(props: Props) {
         )}
       </div>
     );
-  }, [item, show, showDelete, showEdit]);
+  }, [item, show, showDelete, showEdit, findTag]);
   return <>{renderCaptions}</>;
 }
