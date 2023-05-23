@@ -23,7 +23,9 @@ export default function HomeUser() {
   useEffect(() => {
     const fetchData = async () => {
       await getListCaptions()
-        .then((data: any) => setListData(data?.reverse()))
+        .then((data: any) => {
+          setListData(data.table?.reverse())
+        })
         .catch((err: any) => console.log(err));
     };
     fetchData();

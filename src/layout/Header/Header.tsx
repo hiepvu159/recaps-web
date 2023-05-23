@@ -16,10 +16,12 @@ export default function Header() {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserDetail>();
   useEffect(() => {
-    const getItem: any =
-      checkExistLocalStorage() && localStorage.getItem("user");
-    if (!!getItem) {
-      setUserInfo(JSON.parse(getItem));
+    if (router.pathname.includes("account")) {
+      const getItem: any =
+        checkExistLocalStorage() && localStorage.getItem("user");
+      if (!!getItem) {
+        setUserInfo(JSON.parse(getItem));
+      }
     }
   }, [router]);
   const handleLogout = useCallback(async () => {
@@ -72,8 +74,7 @@ export default function Header() {
               />
             </div>
             <div className={cx(classes.itemNoti, classes.name)}>
-              {/* {userInfo?.user?.userName || "User Name"} */}
-              User Name
+              {userInfo?.user?.userName || "User Name"}
             </div>
             <div className={cx(classes.groupBtn, "ml-3")}>
               <Link href={"/login"}>

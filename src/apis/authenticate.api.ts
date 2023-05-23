@@ -6,12 +6,11 @@ export interface UserRequestBody {
   password: string;
 }
 export function doLogin(body: UserRequestBody) {
-  return unauthorizedRequest.post(`/user/login`, body);
+  return unauthorizedRequest.post(`/login`, body);
 }
 
-export function signUp(body: any){
-  return unauthorizedRequest.post(`/user/register`, body);
-
+export function signUp(body: any) {
+  return unauthorizedRequest.post(`/register/new`, body);
 }
 
 export function doLogout() {
