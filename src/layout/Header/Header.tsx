@@ -15,13 +15,13 @@ import { doLogout } from "@/apis/authenticate.api";
 export default function Header() {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserDetail>();
-  // useEffect(() => {
-  //   const getItem: any =
-  //     checkExistLocalStorage() && localStorage.getItem("user");
-  //   if (!!getItem) {
-  //     setUserInfo(JSON.parse(getItem));
-  //   }
-  // }, [router]);
+  useEffect(() => {
+    const getItem: any =
+      checkExistLocalStorage() && localStorage.getItem("user");
+    if (!!getItem) {
+      setUserInfo(JSON.parse(getItem));
+    }
+  }, [router]);
   const handleLogout = useCallback(async () => {
     await doLogout()
       .then(() => {

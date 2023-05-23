@@ -50,7 +50,7 @@ export default function Register() {
 
   const onSubmit = useCallback(async (values: any) => {
     const body = {
-      username: values?.name,
+      userName: values?.name,
       email: values?.email,
       password: values?.password,
     };
