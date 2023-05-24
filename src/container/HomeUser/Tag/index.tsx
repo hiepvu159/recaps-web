@@ -46,7 +46,6 @@ export default function Tags() {
       );
     }
   }, [listTags, search]);
-  console.log("123", listTagsSearch);
 
   const renderTags = useMemo(() => {
     return (

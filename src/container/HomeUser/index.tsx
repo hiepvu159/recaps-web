@@ -63,14 +63,15 @@ export default function HomeUser() {
     fetchData();
   }, []);
 
-  const listCaptions = useMemo(() => {
-    if (query?.tag) {
+  useEffect(() => {
+    if (!!query?.tag) {
       const data = listData?.filter(
         (item: any) => Number(item?.id_tag) === Number(query?.tag)
       );
-      return data;
+      setListDataSearch(data);
+      return;
     }
-    return listData;
+    setListDataSearch(listData);
   }, [query, listData]);
 
   const renderHeader = useMemo(() => {
@@ -110,15 +111,17 @@ export default function HomeUser() {
       >
         <Tags />
         <Card className={classes.cardCaption}>
-          {listCaptions?.map((item: any) => (
-            <ItemCaption
-              item={item}
-              key={item?.id}
-              handleDelete={() => handleDelete(item)}
-              listTags={listTags}
-              handleUpdate={(e) => handleUpdate(e)}
-            />
-          ))}
+          {listDataSearch?.map((item: any, index) => {
+            return (
+              <ItemCaption
+                item={item}
+                key={index}
+                handleDelete={() => handleDelete(item)}
+                listTags={listTags}
+                handleUpdate={(e) => handleUpdate(e)}
+              />
+            );
+          })}
         </Card>
       </div>
     </div>
