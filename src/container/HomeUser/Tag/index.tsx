@@ -12,6 +12,7 @@ import cx from "classnames";
 export default function Tags() {
   const router = useRouter();
   const [listTags, setListTags] = useState<any>([]);
+  const [search, setSearch] = useState("");
   const [tagSelected, setTagSelected] = useState(null);
   useEffect(() => {
     const getAllTags = async () => {
@@ -38,12 +39,21 @@ export default function Tags() {
     [tagSelected, router]
   );
 
+  const listTagsSearch = useMemo(() => {
+    if (listTags?.length) {
+      return listTags?.filter((item: any) =>
+        item?.name?.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+  }, [listTags, search]);
+  console.log("123", listTagsSearch);
+
   const renderTags = useMemo(() => {
     return (
       <Card className={classes.cardTags}>
         <div className={classes.title}>Tags</div>
         <div className={classes.listItemTags}>
-          {listTags?.map((item: any) => {
+          {listTagsSearch?.map((item: any) => {
             return (
               <div className={classes.itemTags} key={item?.idTag}>
                 <Button
@@ -67,10 +77,11 @@ export default function Tags() {
             type="text"
             className={classes.searchBox}
             placeholder="Type your search tags..."
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </Card>
     );
-  }, [listTags, tagSelected]);
+  }, [listTagsSearch, tagSelected]);
   return <>{renderTags}</>;
 }
