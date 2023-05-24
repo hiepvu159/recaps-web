@@ -21,14 +21,22 @@ export default function Tags() {
     getAllTags().catch((err) => console.log());
   }, [router]);
 
-  const handleSelectTag = useCallback((item: any) => {
-    setTagSelected(item?.idTag);
-    router.replace({
-      query: {
-        tag: item?.idTag,
-      },
-    });
-  }, []);
+  const handleSelectTag = useCallback(
+    (item: any) => {
+      if (tagSelected === item?.idTag) {
+        setTagSelected(null);
+        router.replace({ query: {} });
+      } else {
+        setTagSelected(item?.idTag);
+        router.replace({
+          query: {
+            tag: item?.idTag,
+          },
+        });
+      }
+    },
+    [tagSelected, router]
+  );
 
   const renderTags = useMemo(() => {
     return (

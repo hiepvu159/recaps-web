@@ -69,7 +69,6 @@ export default function ItemCaption(props: Props) {
       return listTags.find((i: any) => i.idTag === item.id_tag);
     }
   }, [item, listTags]);
-  console.log(findTag);
 
   const renderCaptions = useMemo(() => {
     return (

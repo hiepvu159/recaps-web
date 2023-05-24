@@ -91,8 +91,7 @@ export default function Recommendation() {
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div className={classes.listTag}>
-              <div className={classes.tagItem}>Madness</div>
-              <div className={classes.tagItem}>Madness</div>
+              <div className={classes.tagItem}>Tình Yêu</div>
             </div>
 
             <div className={classes.emoItem}>
@@ -151,7 +150,7 @@ export default function Recommendation() {
         content: values?.content?.trim(),
         idUser: idUser,
         trangThai: emotion,
-        idTag: listTagsSelected?.value as any,
+        idTag: listTagsSelected?.value,
       };
       await addNewCaption(body)
         .then(() => {
@@ -164,12 +163,15 @@ export default function Recommendation() {
         })
         .catch((err) => alert({ err }));
     },
-    [idUser]
+    [idUser, listTagsSelected, emotion]
   );
 
-  const handleChangeTags = useCallback((values: any) => {
-    setListTagsSelected(values);
-  }, []);
+  const handleChangeTags = useCallback(
+    (values: any) => {
+      setListTagsSelected(values);
+    },
+    [listTagsSelected]
+  );
   return (
     <>
       {renderHeader}

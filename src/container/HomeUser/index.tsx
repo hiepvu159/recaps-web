@@ -12,11 +12,13 @@ import {
 } from "@/apis/captions.api";
 import ItemCaption from "@/components/CaptionItem";
 import { getListTag } from "@/apis/listTag.api";
+import { useRouter } from "next/router";
 
 export default function HomeUser() {
   const [listData, setListData] = useState([]);
+  const [listDataSearch, setListDataSearch] = useState([]);
   const [listTags, setListTags] = useState([]);
-
+  const { query } = useRouter();
   const handleDelete = useCallback(async (item: any) => {
     await deleteCaption(item?.id_caption)
       .then((res) => alert("Success"))
@@ -61,6 +63,17 @@ export default function HomeUser() {
     fetchData();
   }, []);
 
+  const listCaptions = useMemo(() => {
+    if (query?.tag) {
+      const data = listData?.filter(
+        (item: any) => Number(item?.id_tag) === Number(query?.tag)
+      );
+      return data;
+    }
+    return listData;
+  }, [query, listData]);
+  console.log("123", listCaptions);
+
   const renderHeader = useMemo(() => {
     return (
       <div style={{ backgroundColor: "#FFFAFA", position: "relative" }}>
@@ -98,7 +111,7 @@ export default function HomeUser() {
       >
         <Tags />
         <Card className={classes.cardCaption}>
-          {listData?.map((item: any) => (
+          {listCaptions?.map((item: any) => (
             <ItemCaption
               item={item}
               key={item?.id}
