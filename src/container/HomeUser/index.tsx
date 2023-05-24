@@ -72,7 +72,6 @@ export default function HomeUser() {
     }
     return listData;
   }, [query, listData]);
-  console.log("123", listCaptions);
 
   const renderHeader = useMemo(() => {
     return (
