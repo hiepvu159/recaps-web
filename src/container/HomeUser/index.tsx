@@ -33,11 +33,11 @@ export default function HomeUser() {
 
   const handleUpdate = useCallback(async (item: any) => {
     const payload = {
-      Content: item?.content,
-      IDCaption: item?.item.id_caption,
-      IDUser: item?.item.id_user,
-      TrangThai: item?.emotion,
-      IDTag: item?.tag,
+      content: item?.content,
+      idCaption: item?.item.id_caption,
+      idUser: item?.item.id_user,
+      trangThai: item?.emotion,
+      idTag: item?.tag,
     };
     await updateCaption(payload)
       .then((res) => alert("Success"))

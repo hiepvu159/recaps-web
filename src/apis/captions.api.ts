@@ -13,7 +13,7 @@ interface NewCaptionBody {
   Content: string;
   IDCaption: number;
   TrangThai: boolean;
-  IDTag:string;
+  IDTag: string;
   IDUser: string;
 }
 export function getListCaptions() {
@@ -24,10 +24,10 @@ export function addNewCaption(body: NewCaptionBody) {
   return unauthorizedRequest.post(`/AddCaption/new`, body);
 }
 
-export function updateCaption(params: any){
-  return unauthorizedRequest.put(`/UpdateCaption?IDCaption=${params.IDCaption}&Content=${params.Content}&IDUser=${params.IDUser}&TrangThai=${params.TrangThai}&IDTag=${params.IDTag}`)
+export function updateCaption(params: any) {
+  return unauthorizedRequest.put(`/UpdateCaption`, params);
 }
 
-export function deleteCaption (params: string){
-  return unauthorizedRequest.delete(`/removeCaption?idCaption=${params}`)
+export function deleteCaption(params: string) {
+  return unauthorizedRequest.delete(`/removeCaption?idCaption=${params}`);
 }
