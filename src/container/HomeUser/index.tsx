@@ -13,12 +13,18 @@ import {
 import ItemCaption from "@/components/CaptionItem";
 import { getListTag } from "@/apis/listTag.api";
 import { useRouter } from "next/router";
+import { checkExistLocalStorage } from "@/helper/ultilities";
 
 export default function HomeUser() {
   const [listData, setListData] = useState([]);
   const [listDataSearch, setListDataSearch] = useState([]);
   const [listTags, setListTags] = useState([]);
   const { query } = useRouter();
+  const userInfo = useMemo(() => {
+    const data: any = checkExistLocalStorage() && localStorage.getItem("user");
+    return JSON.parse(data)?.user;
+  }, []);
+
   const handleDelete = useCallback(async (item: any) => {
     await deleteCaption(item?.id_caption)
       .then((res) => alert("Success"))
@@ -26,7 +32,10 @@ export default function HomeUser() {
 
     await getListCaptions()
       .then((data: any) => {
-        setListData(data.table?.reverse());
+        const captionByIdUser = data.table.filter(
+          (item: any) => item.id_user === userInfo.id
+        );
+        setListData(captionByIdUser.reverse());
       })
       .catch((err: any) => console.log(err));
   }, []);
@@ -44,7 +53,10 @@ export default function HomeUser() {
       .catch((err) => console.log(err));
     await getListCaptions()
       .then((data: any) => {
-        setListData(data.table?.reverse());
+        const captionByIdUser = data.table.filter(
+          (item: any) => item.id_user === userInfo.id
+        );
+        setListData(captionByIdUser.reverse());
       })
       .catch((err: any) => console.log(err));
   }, []);
@@ -53,7 +65,10 @@ export default function HomeUser() {
     const fetchData = async () => {
       await getListCaptions()
         .then((data: any) => {
-          setListData(data.table?.reverse());
+          const captionByIdUser = data.table.filter(
+            (item: any) => item.id_user === userInfo.id
+          );
+          setListData(captionByIdUser?.reverse());
         })
         .catch((err: any) => console.log(err));
 
