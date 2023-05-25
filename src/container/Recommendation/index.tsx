@@ -21,6 +21,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { checkExistLocalStorage } from "@/helper/ultilities";
 import { addNewCaption } from "@/apis/captions.api";
 import { useRouter } from "next/router";
+import { toastError, toastSuccess } from "@/helper/toastMessage";
 
 interface InitStateTagSelected {
   value: number;
@@ -154,14 +155,14 @@ export default function Recommendation() {
       };
       await addNewCaption(body)
         .then(() => {
-          alert("Add Caption Success");
+          toastSuccess("Create Caption Successfully");
           setEmotion(true);
           setListTagsSelected({
             value: 0,
             label: "string",
           });
         })
-        .catch((err) => alert({ err }));
+        .catch((err) => toastError(err));
     },
     [idUser, listTagsSelected, emotion]
   );

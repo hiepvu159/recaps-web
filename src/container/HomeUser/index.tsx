@@ -14,6 +14,9 @@ import ItemCaption from "@/components/CaptionItem";
 import { getListTag } from "@/apis/listTag.api";
 import { useRouter } from "next/router";
 import { checkExistLocalStorage } from "@/helper/ultilities";
+import { ToastContainer, toast, Slide } from "react-toastify";
+import { Button } from "@mui/material";
+import { toastError, toastSuccess } from "@/helper/toastMessage";
 
 export default function HomeUser() {
   const [listData, setListData] = useState([]);
@@ -27,8 +30,8 @@ export default function HomeUser() {
 
   const handleDelete = useCallback(async (item: any) => {
     await deleteCaption(item?.id_caption)
-      .then((res) => alert("Success"))
-      .catch((err) => console.log(err));
+      .then((res) => toastSuccess("Deleted Successfully"))
+      .catch((err) => toastError(err));
 
     await getListCaptions()
       .then((data: any) => {
@@ -47,10 +50,35 @@ export default function HomeUser() {
       idUser: item?.item.id_user,
       trangThai: item?.emotion,
       idTag: item?.tag,
+      favourite: item?.favourite,
     };
     await updateCaption(payload)
-      .then((res) => alert("Success"))
+      .then((res) => toastSuccess("Update Successfully"))
       .catch((err) => console.log(err));
+    await getListCaptions()
+      .then((data: any) => {
+        const captionByIdUser = data.table.filter(
+          (item: any) => item.id_user === userInfo.id
+        );
+        setListData(captionByIdUser.reverse());
+      })
+      .catch((err: any) => console.log(err));
+  }, []);
+
+  const handleChangeFavourite = useCallback(async (item: any) => {
+    const payload = {
+      content: item?.content,
+      idCaption: item?.id_caption,
+      idUser: item?.id_user,
+      trangThai: item?.trang_thai,
+      idTag: item?.id_tag,
+      favourite: !item?.favourite,
+    };
+
+    await updateCaption(payload)
+      .then(() => toastSuccess("Change favourite success"))
+      .catch((err) => toastError(err));
+
     await getListCaptions()
       .then((data: any) => {
         const captionByIdUser = data.table.filter(
@@ -114,31 +142,34 @@ export default function HomeUser() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#FFFAFA" }}>
-      {renderHeader}
-      <div
-        style={{
-          backgroundColor: "#FFFAFA",
-          display: "flex",
-          justifyContent: "center",
-          padding: "0 160px 30px 160px",
-        }}
-      >
-        <Tags />
-        <Card className={classes.cardCaption}>
-          {listDataSearch?.map((item: any, index) => {
-            return (
-              <ItemCaption
-                item={item}
-                key={index}
-                handleDelete={() => handleDelete(item)}
-                listTags={listTags}
-                handleUpdate={(e) => handleUpdate(e)}
-              />
-            );
-          })}
-        </Card>
+    <>
+      <div style={{ backgroundColor: "#FFFAFA" }}>
+        {renderHeader}
+        <div
+          style={{
+            backgroundColor: "#FFFAFA",
+            display: "flex",
+            justifyContent: "center",
+            padding: "0 160px 30px 160px",
+          }}
+        >
+          <Tags />
+          <Card className={classes.cardCaption}>
+            {listDataSearch?.map((item: any, index) => {
+              return (
+                <ItemCaption
+                  item={item}
+                  key={index}
+                  handleDelete={() => handleDelete(item)}
+                  listTags={listTags}
+                  handleUpdate={(e) => handleUpdate(e)}
+                  handleChangeFavourite={() => handleChangeFavourite(item)}
+                />
+              );
+            })}
+          </Card>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

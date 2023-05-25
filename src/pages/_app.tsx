@@ -1,11 +1,11 @@
 import { ComponentStatic } from "@/helper/common";
-// import { store } from "@/store/store";
 import "@/styles/globals.scss";
 import { NextComponentType, NextPageContext } from "next";
 import type { AppContext, AppProps } from "next/app";
 import { AppPropsType } from "next/dist/shared/lib/utils";
 import { useMemo } from "react";
-import { Provider } from "react-redux";
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = ({ Component, pageProps }: AppProps & AppPropsType) => {
   const renderApp = useMemo(() => {
@@ -21,6 +21,12 @@ const App = ({ Component, pageProps }: AppProps & AppPropsType) => {
     <>
       {/* <Provider store={store}>{renderApp}</Provider> */}
       {renderApp}
+      <ToastContainer
+        hideProgressBar
+        position="top-right"
+        transition={Slide}
+        autoClose={3000}
+      />
     </>
   );
 };

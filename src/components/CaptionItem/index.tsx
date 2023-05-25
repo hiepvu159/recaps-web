@@ -16,15 +16,19 @@ import icStar from "@/assets/img/icStar.svg";
 import icUnStar from "@/assets/img/icUnStar.svg";
 import icAction from "@/assets/img/icAction.svg";
 import Action from "@/container/HomeUser/Action";
+import { updateCaption } from "@/apis/captions.api";
+import { toastError, toastSuccess } from "@/helper/toastMessage";
 
 interface Props {
   item: any;
   handleDelete: (item: any) => void;
   listTags: any;
   handleUpdate: (item: any) => void;
+  handleChangeFavourite: () => void;
 }
 export default function ItemCaption(props: Props) {
-  const { item, handleDelete, listTags, handleUpdate } = props;
+  const { item, handleDelete, listTags, handleUpdate, handleChangeFavourite } =
+    props;
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -75,7 +79,11 @@ export default function ItemCaption(props: Props) {
       <div className={classes.container} ref={ref}>
         <div className={classes.itemCaption}>
           <div className={classes.itemWrapper}>
-            <Image src={icStar} alt="" />
+            <Image
+              src={item?.favourite ? icStar : icUnStar}
+              alt=""
+              onClick={handleChangeFavourite}
+            />
             <div className={classes.wrapperDes}>
               <div className={classes.descriptionItem}>{item?.content}</div>
               <div className={classes.listItem}>
