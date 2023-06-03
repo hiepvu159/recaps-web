@@ -6,7 +6,7 @@ export default class Request {
   constructor() {
     this.api = axios.create({
       // withCredentials: false,
-      baseURL: "http://123.31.17.35:8096",
+      baseURL: "http://127.0.0.1:5000",
       headers: {
         "Content-Type": "application/json",
       },
